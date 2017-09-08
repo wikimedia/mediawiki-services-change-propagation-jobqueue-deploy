@@ -1,0 +1,21 @@
+# log-related variables
+log_name: cp-jobqueue
+logstash_host: localhost
+logstash_port: 12201
+log_file: /tmp/cpjq.log
+# metrics
+metrics_name: cp-jobqueue
+metrics_host: localhost
+metrics_port: 8252
+# service
+name: cp-jobqueue
+port: 7200
+proxy:
+site: datacenter1
+broker_list: localhost:9092
+jobrunner_uri: http://localhost/rpc/RunSingleJob.php
+concurrency: 50
+redis_path: /var/run/redis.sock
+redis_pass:
+env: production
+kafka_max_bytes: 4194304

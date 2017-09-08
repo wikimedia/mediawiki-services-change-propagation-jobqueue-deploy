@@ -1,0 +1,98 @@
+spec: &spec
+  x-sub-request-filters:
+    - type: default
+      name: http
+      options:
+        allow:
+          - pattern: /^https?:\/\//
+            forward_headers:
+              user-agent: true
+  title: The Change Propagation for JobQueue root
+  paths:
+<%- if env == 'production' %>
+    /{api:sys}/dedupe:
+      x-modules:
+        - path: src/sys/deduplicator.js
+          options:
+            redis:
+              path: <%= redis_path %>
+              password: <%= redis_pass if redis_pass else '' %>
+<%- endif %>
+    /{api:sys}/queue:
+      x-modules:
+        - path: src/sys/kafka.js
+          options:
+            metadata_broker_list: <%= broker_list %>
+            dc_name: <%= site %>
+            consumer:
+              # JobQueue jobs might sent messages larget then 1 Meg,
+              # so we increase the max message size in kafka and have to
+              # ajust the consumers accordingly.
+              fetch.message.max.bytes: <%= kafka_max_bytes %>
+            concurrency: <%= concurrency %>
+            startup_delay: 60000
+            # no rules for first deployment
+            templates: {}
+
+
+# Number of worker processes to spawn.
+# Set to 0 to run everything in a single process without clustering.
+# Use 'ncpu' to run as many workers as there are CPU units
+num_workers: ncpu
+
+# Log error messages and gracefully restart a worker if v8 reports that it
+# uses more heap (note: not RSS) than this many mb.
+worker_heap_limit_mb: 750
+
+# The maximum interval in ms that can pass between two beat messages
+# sent by each worker to the master before it is killed
+worker_heartbeat_timeout: 15000
+
+# Logger info
+logging:
+  level: warn
+  name: <%= log_name %>
+  streams:
+    - host: <%= logstash_host %>
+      port: <%= logstash_port %>
+      type: gelf
+    - level: info
+      path: <%= log_file %>
+      type: file
+  sampled_levels:
+    trace/dedupe: 0.01
+
+# Statsd metrics reporter
+metrics:
+  name: <%= metrics_name %>
+  host: <%= metrics_host %>
+  port: <%= metrics_port %>
+  type: statsd
+
+services:
+  - name: <%= name %>
+    # a relative path or the name of an npm package, if different from name
+    module: hyperswitch
+    # per-service config
+    conf:
+      cors: "*"
+      port: <%= port %>
+      # interface: localhost # uncomment to only listen on localhost
+      # URL of the outbound proxy to use (complete with protocol)
+      proxy: <%= proxy if proxy else '' %>
+      # the list of domains for which not to use the proxy defined above
+      # no_proxy_list:
+      #   - domain1.com
+      #   - domain2.org
+      # the list of incoming request headers that can be logged; if left empty,
+      # the following headers are allowed: cache-control, content-length,
+      # content-type, if-match, user-agent, x-request-id
+      # log_header_whitelist:
+      #   - cache-control
+      #   - content-length
+      #   - content-type
+      #   - if-match
+      #   - user-agent
+      #   - x-request-id
+      user_agent: ChangePropagation-JobQueue/WMF
+      spec: *spec
