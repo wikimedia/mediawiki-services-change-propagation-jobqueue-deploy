@@ -1,5 +1,5 @@
 ---
-/etc/cp-jobqueue/config.yaml:
+/etc/cpjobqueue/config.yaml:
   template: config.yaml.j2
   erb_syntax: True
-  remote_vars: /etc/cp-jobqueue/config-vars.yaml
+  remote_vars: /etc/cpjobqueue/config-vars.yaml
