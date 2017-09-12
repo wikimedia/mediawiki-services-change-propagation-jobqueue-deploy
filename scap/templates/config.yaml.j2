@@ -32,8 +32,15 @@ spec: &spec
               fetch.message.max.bytes: <%= kafka_max_bytes %>
             concurrency: <%= concurrency %>
             startup_delay: 60000
-            # no rules for first deployment
-            templates: {}
+            templates:
+              updateBetaFeaturesUserCounts:
+                topic: 'mediawiki.job.updateBetaFeaturesUserCounts'
+                exec:
+                  method: post
+                  uri: '<%= jobrunner_uri %>'
+                  headers:
+                    content-type: 'application/json'
+                  body: '{{globals.message}}'
 
 
 # Number of worker processes to spawn.
