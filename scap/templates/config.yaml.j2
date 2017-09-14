@@ -40,7 +40,15 @@ spec: &spec
                   uri: '<%= jobrunner_uri %>'
                   headers:
                     content-type: 'application/json'
-                  body: '{{globals.message}}'
+                  # Temporary so that we could add a 'pipeline' property to the params.
+                  body:
+                    database: '{{message.database}}'
+                    meta: '{{message.meta}}'
+                    page_namespace: '{{message.page_namespace}}'
+                    page_title: '{{message.page_title}}'
+                    params: '{{merge(message.params, {"pipeline": "EventBus"})}}'
+                    sha1: '{{message.sha1}}'
+                    type: '{{message.type}}'
 
 
 # Number of worker processes to spawn.
