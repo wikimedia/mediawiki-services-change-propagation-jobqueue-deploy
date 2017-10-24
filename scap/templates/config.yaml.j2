@@ -34,12 +34,17 @@ spec: &spec
             startup_delay: 60000
             templates:
               updateBetaFeaturesUserCounts:
+<%- if env == 'production' %>
                 topic: 'mediawiki.job.updateBetaFeaturesUserCounts'
+<%- else %>
+                topic: '/^mediawiki\.job\..*/'
+<%- endif %>
                 exec:
                   method: post
                   uri: '<%= jobrunner_uri %>'
                   headers:
                     content-type: 'application/json'
+                    host: '{{message.meta.domain}}'
                   body: '{{globals.message}}'
 
 
