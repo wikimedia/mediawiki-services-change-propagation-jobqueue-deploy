@@ -35,7 +35,7 @@ spec: &spec
             templates:
               job:
 <%- if env == 'production' %>
-                topic: '/^mediawiki\.job\.(?:deleteLinks)|(?:MessageIndexRebuildJob)|(?:flaggedrevs_CacheUpdate)|(?:updateBetaFeaturesUserCounts)$/'
+                topic: '/^(?:mediawiki\.job\.deleteLinks)|(?:mediawiki\.job\.MessageIndexRebuildJob)|(?:mediawiki\.job\.flaggedrevs_CacheUpdate)|(?:mediawiki\.job\.updateBetaFeaturesUserCounts)$/'
 <%- else %>
                 topic: '/^mediawiki\.job\..*/'
 <%- endif %>
