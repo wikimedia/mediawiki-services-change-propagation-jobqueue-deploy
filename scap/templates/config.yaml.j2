@@ -33,9 +33,9 @@ spec: &spec
             concurrency: <%= concurrency %>
             startup_delay: 60000
             templates:
-              updateBetaFeaturesUserCounts:
+              job:
 <%- if env == 'production' %>
-                topic: 'mediawiki.job.updateBetaFeaturesUserCounts'
+                topic: '/^mediawiki\.job\.(?:deleteLinks)|(?:MessageIndexRebuildJob)|(?:flaggedrevs_CacheUpdate)|(?:updateBetaFeaturesUserCounts)$/'
 <%- else %>
                 topic: '/^mediawiki\.job\..*/'
 <%- endif %>
