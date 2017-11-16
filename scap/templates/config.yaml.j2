@@ -33,13 +33,13 @@ spec: &spec
             concurrency: <%= concurrency %>
             startup_delay: 60000
             templates:
-              job:
 <%- if env == 'production' %>
-                topic: '/(?:^mediawiki\.job\.RecordLintJob$)|(?:^mediawiki\.job\.deleteLinks$)|(?:^mediawiki\.job\.MessageIndexRebuildJob$)|(?:^mediawiki\.job\.flaggedrevs_CacheUpdate$)|(?:^mediawiki\.job\.updateBetaFeaturesUserCounts$)/'
-                consumer_batch_size: 10 # Temporary for testing
-<%- else %>
-                topic: '/^mediawiki\.job\..*/'
-<%- endif %>
+<%- for topic, topic_config in jobs_enabled.iteritems() %>
+              <%= topic %>:
+                topic: 'mediawiki.job.<%= topic %>'
+<%- for key, value in topic_config.iteritems() %>
+                <%= key %>: <%= value %>
+<%- endfor %>
                 exec:
                   method: post
                   uri: '<%= jobrunner_uri %>'
@@ -48,6 +48,31 @@ spec: &spec
                   body: '{{globals.message}}'
                   agentOptions:
                     keepAlive: true
+<%- endfor %>
+              # Temporary for double-processing to not loose jobs!
+              job:
+                topic: '/(?:^mediawiki\.job\.RecordLintJob$)|(?:^mediawiki\.job\.deleteLinks$)|(?:^mediawiki\.job\.MessageIndexRebuildJob$)|(?:^mediawiki\.job\.flaggedrevs_CacheUpdate$)|(?:^mediawiki\.job\.updateBetaFeaturesUserCounts$)/'
+                exec:
+                  method: post
+                  uri: '<%= jobrunner_uri %>'
+                  headers:
+                    content-type: 'application/json'
+                  body: '{{globals.message}}'
+                  agentOptions:
+                    keepAlive: true
+              # End of temporary code
+<%- else %>
+              job:
+                topic: '/^mediawiki\.job\..*/'
+                exec:
+                  method: post
+                  uri: '<%= jobrunner_uri %>'
+                  headers:
+                    content-type: 'application/json'
+                  body: '{{globals.message}}'
+                  agentOptions:
+                    keepAlive: true
+<%- endif %>
 
 
 # Number of worker processes to spawn.

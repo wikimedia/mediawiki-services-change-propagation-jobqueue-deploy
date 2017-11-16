@@ -14,8 +14,16 @@ proxy:
 site: datacenter1
 broker_list: localhost:9092
 jobrunner_uri: http://localhost/rpc/RunSingleJob.php
-concurrency: 200
+concurrency: 30
 redis_path: /var/run/redis.sock
 redis_pass:
 env: production
 kafka_max_bytes: 4194304
+jobs_enabled:
+  deleteLinks: {}
+  MessageIndexRebuildJob: {}
+  flaggedrevs_CacheUpdate: {}
+  updateBetaFeaturesUserCounts: {}
+  RecordLintJob:
+    concurrency: 100
+    consumer_batch_size: 10
