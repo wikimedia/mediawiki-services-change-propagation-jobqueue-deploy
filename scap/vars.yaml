@@ -14,7 +14,7 @@ proxy:
 site: datacenter1
 broker_list: localhost:9092
 jobrunner_uri: http://localhost/rpc/RunSingleJob.php
-concurrency: 100
+concurrency: 200
 redis_path: /var/run/redis.sock
 redis_pass:
 env: production
