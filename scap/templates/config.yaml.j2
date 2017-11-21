@@ -10,14 +10,14 @@ spec: &spec
   title: The Change Propagation for JobQueue root
   paths:
 <%- if env == 'production' %>
-#    /{api:sys}/dedupe:
-#      x-modules:
-#        - path: src/sys/deduplicator.js
-#          options:
-#            redis_prefix: 'CPJQ'
-#            redis:
-#              path: <%= redis_path %>
-#              password: <%= redis_pass if redis_pass else '' %>
+    /{api:sys}/dedupe:
+      x-modules:
+        - path: src/sys/deduplicator.js
+          options:
+            redis_prefix: 'CPJQ'
+            redis:
+              path: <%= redis_path %>
+              password: <%= redis_pass if redis_pass else '' %>
 <%- endif %>
     /{api:sys}/queue:
       x-modules:
