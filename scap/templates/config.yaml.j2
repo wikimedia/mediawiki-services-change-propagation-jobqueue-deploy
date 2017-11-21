@@ -36,7 +36,7 @@ spec: &spec
               job:
 <%- if env == 'production' %>
                 topic: '/(?:^mediawiki\.job\.RecordLintJob$)|(?:^mediawiki\.job\.deleteLinks$)|(?:^mediawiki\.job\.MessageIndexRebuildJob$)|(?:^mediawiki\.job\.flaggedrevs_CacheUpdate$)|(?:^mediawiki\.job\.updateBetaFeaturesUserCounts$)/'
-                consumer_batch_size: 50 # Temporary for testing
+                consumer_batch_size: 10 # Temporary for testing
 <%- else %>
                 topic: '/^mediawiki\.job\..*/'
 <%- endif %>
