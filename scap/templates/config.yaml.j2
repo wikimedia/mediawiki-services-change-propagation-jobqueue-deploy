@@ -46,6 +46,8 @@ spec: &spec
                   headers:
                     content-type: 'application/json'
                   body: '{{globals.message}}'
+                  agentOptions:
+                    keepAlive: true
 
 
 # Number of worker processes to spawn.
