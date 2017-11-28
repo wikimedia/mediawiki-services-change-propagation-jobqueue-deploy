@@ -49,18 +49,6 @@ spec: &spec
                   agentOptions:
                     keepAlive: true
 <%- endfor %>
-              # Temporary for double-processing to not loose jobs!
-              job:
-                topic: '/(?:^mediawiki\.job\.RecordLintJob$)|(?:^mediawiki\.job\.deleteLinks$)|(?:^mediawiki\.job\.MessageIndexRebuildJob$)|(?:^mediawiki\.job\.flaggedrevs_CacheUpdate$)|(?:^mediawiki\.job\.updateBetaFeaturesUserCounts$)/'
-                exec:
-                  method: post
-                  uri: '<%= jobrunner_uri %>'
-                  headers:
-                    content-type: 'application/json'
-                  body: '{{globals.message}}'
-                  agentOptions:
-                    keepAlive: true
-              # End of temporary code
 <%- else %>
               job:
                 topic: '/^mediawiki\.job\..*/'
