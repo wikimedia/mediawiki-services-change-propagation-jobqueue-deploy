@@ -49,6 +49,22 @@ spec: &spec
                   agentOptions:
                     keepAlive: true
 <%- endfor %>
+# Temporary section - we are only enabling the htmlCacheUpdate for wiktionaries
+# Later this will be moved to the vars.yaml as all the other jobs.
+              htmlCacheUpdate:
+                topic: 'mediawiki.job.htmlCacheUpdate
+                match:
+                  meta:
+                    domain: '/.*\.wiktionary\.org$/'
+                exec:
+                  method: post
+                  uri: '<%= jobrunner_uri %>'
+                  headers:
+                    content-type: 'application/json'
+                  body: '{{globals.message}}'
+                  agentOptions:
+                    keepAlive: true
+# End of temporary section
 <%- else %>
               job:
                 topic: '/^mediawiki\.job\..*/'
