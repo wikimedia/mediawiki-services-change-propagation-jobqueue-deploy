@@ -55,7 +55,7 @@ spec: &spec
                 topic: 'mediawiki.job.htmlCacheUpdate'
                 match:
                   meta:
-                    domain: '/.*\.wiktionary\.org$/'
+                    domain: '/(?:^ceb\.wikipedia\.org$)|(?:^ru\.wikipedia\.org$)|(?:.*\.wikibooks\.org$)|(?:.*\.wikinews\.org$)|(?:.*\.wikiquote\.org$)|(?:.*\.wikisource\.org$)|(?:.*\.wikiversity\.org$)|(?:.*\.wikivoyage\.org$)|(?:.*\.wiktionary\.org$)/'
                 exec:
                   method: post
                   uri: '<%= jobrunner_uri %>'
