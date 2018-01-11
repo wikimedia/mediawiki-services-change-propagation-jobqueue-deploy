@@ -49,13 +49,13 @@ spec: &spec
                   agentOptions:
                     keepAlive: true
 <%- endfor %>
-# Temporary section - we are only enabling the htmlCacheUpdate for wiktionaries
+# Temporary section - we are only enabling the htmlCacheUpdate for all but enwiki, commons and wikidata
 # Later this will be moved to the vars.yaml as all the other jobs.
               htmlCacheUpdate:
                 topic: 'mediawiki.job.htmlCacheUpdate'
-                match:
+                match_not:
                   meta:
-                    domain: '/(?:^ceb\.wikipedia\.org$)|(?:^ru\.wikipedia\.org$)|(?:.*\.wikibooks\.org$)|(?:.*\.wikinews\.org$)|(?:.*\.wikiquote\.org$)|(?:.*\.wikisource\.org$)|(?:.*\.wikiversity\.org$)|(?:.*\.wikivoyage\.org$)|(?:.*\.wiktionary\.org$)/'
+                    domain: '/(?:^en\.wikipedia\.org$)|(?:^commons\.wikimedia\.org$)|(?:.*wikidata\.org$)/'
                 exec:
                   method: post
                   uri: '<%= jobrunner_uri %>'
