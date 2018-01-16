@@ -21,11 +21,15 @@ env: production
 kafka_max_bytes: 4194304
 jobs_enabled:
   deleteLinks: {}
-  MessageIndexRebuildJob: {}
   flaggedrevs_CacheUpdate: {}
-  updateBetaFeaturesUserCounts: {}
+  htmlCacheUpdate:
+    # The avg exec time of the job is 60ms
+    # so this gives us 150 jobs/s - 3 times the avg rate
+    concurrency: 10
+  MessageIndexRebuildJob: {}
   RecordLintJob:
     concurrency: 100
     consumer_batch_size: 10
+  updateBetaFeaturesUserCounts: {}
   wikibase-addUsagesForPage: {}
 
