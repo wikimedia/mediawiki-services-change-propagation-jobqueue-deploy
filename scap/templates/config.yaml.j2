@@ -49,6 +49,22 @@ spec: &spec
                   agentOptions:
                     keepAlive: true
 <%- endfor %>
+# Temporary section - we are only enabling the refreshLinks for a subset of wikis.
+# Later this will be moved to the vars.yaml as all the other jobs.
+              refreshLinks:
+                topic: 'mediawiki.job.refreshLinks'
+                match:
+                  meta:
+                    domain: '/(?:^test\.wikipedia\.org$)|(?:^test2\.wikipedia\.org$)|(?:^test\.wikidata\.org$)|(?:^mediawiki\.org$)|(?:^www\.mediawiki\.org$)|(?:^ru\.wikivoyage\.org$)/'
+                exec:
+                  method: post
+                  uri: '<%= jobrunner_uri %>'
+                  headers:
+                    content-type: 'application/json'
+                  body: '{{globals.message}}'
+                  agentOptions:
+                    keepAlive: true
+# End of temporary section
 <%- else %>
               job:
                 topic: '/^mediawiki\.job\..*/'
