@@ -89,6 +89,8 @@ logging:
       type: file
   sampled_levels:
     trace/dedupe: 0.01
+    # With the average job insertion rate of 1000/s this will give about 1 sample log per minute
+    trace/sample: 0.00002
 
 # Statsd metrics reporter
 metrics:
