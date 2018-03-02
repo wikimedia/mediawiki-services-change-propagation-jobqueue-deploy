@@ -20,6 +20,7 @@ redis_pass:
 env: production
 kafka_max_bytes: 4194304
 jobs_enabled:
+  cdnPurge: {}
   deleteLinks: {}
   flaggedrevs_CacheUpdate: {}
   htmlCacheUpdate:

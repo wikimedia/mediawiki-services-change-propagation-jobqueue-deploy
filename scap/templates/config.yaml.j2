@@ -65,22 +65,6 @@ spec: &spec
                   agentOptions:
                     keepAlive: true
 # End of temporary section
-# Temporary section - we are only enabling the cdnPurge for a subset of wikis.
-# Later this will be moved to the vars.yaml as all the other jobs.
-              cdnPurge:
-                topic: 'mediawiki.job.cdnPurge'
-                match_not:
-                  meta:
-                    domain: '/(?:^.*\.wikipedia\.org$)|(?:^www\.wikidata\.org$)|(?:^commons\.wikimedia\.org$)/'
-                exec:
-                  method: post
-                  uri: '<%= jobrunner_uri %>'
-                  headers:
-                    content-type: 'application/json'
-                  body: '{{globals.message}}'
-                  agentOptions:
-                    keepAlive: true
-# End of temporary section
 <%- else %>
               job:
                 topic: '/^mediawiki\.job\..*/'
