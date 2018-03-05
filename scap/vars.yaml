@@ -31,6 +31,10 @@ jobs_enabled:
   RecordLintJob:
     concurrency: 100
     consumer_batch_size: 10
+  refreshLinks:
+    concurrency: 100
+  refreshLinksDynamic: {}
+  refreshLinksPrioritized: {}
   updateBetaFeaturesUserCounts: {}
   wikibase-addUsagesForPage: {}
 
