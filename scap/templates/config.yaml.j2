@@ -52,6 +52,7 @@ spec: &spec
 # Temporary section - we are only enabling the refreshLinks for a subset of wikis.
 # Later this will be moved to the vars.yaml as all the other jobs.
               refreshLinks:
+                concurrency: 100
                 topic: 'mediawiki.job.refreshLinks'
                 match_not:
                   meta:
