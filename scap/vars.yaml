@@ -35,4 +35,15 @@ jobs_enabled:
   refreshLinksPrioritized: {}
   updateBetaFeaturesUserCounts: {}
   wikibase-addUsagesForPage: {}
+cirrus_search_jobs:
+  - cirrusSearchCheckerJob
+  - cirrusSearchDeleteArchive
+  - cirrusSearchDeletePages
+  - cirrusSearchElasticaWrite
+  - cirrusSearchIncomingLinkCount
+  - cirrusSearchLinksUpdate
+  - cirrusSearchLinksUpdatePrioritized
+  - cirrusSearchMassIndex
+  - cirrusSearchOtherIndex
+
 
