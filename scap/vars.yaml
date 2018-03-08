@@ -32,7 +32,7 @@ jobs_enabled:
     concurrency: 100
     consumer_batch_size: 10
   refreshLinks:
-    concurrency: 250
+    concurrency: 175
   refreshLinksDynamic: {}
   refreshLinksPrioritized: {}
   updateBetaFeaturesUserCounts: {}
