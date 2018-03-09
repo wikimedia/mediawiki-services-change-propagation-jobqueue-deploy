@@ -33,6 +33,8 @@ jobs_enabled:
     consumer_batch_size: 10
   refreshLinks:
     concurrency: 175
+    # Abandon jobs which root job is more then 1 week long
+    root_claim_ttl: 604800
   refreshLinksDynamic: {}
   refreshLinksPrioritized: {}
   updateBetaFeaturesUserCounts: {}
