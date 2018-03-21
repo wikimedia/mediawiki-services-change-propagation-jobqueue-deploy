@@ -18,9 +18,9 @@ spec: &spec
             redis:
               path: <%= redis_path %>
               password: <%= redis_pass if redis_pass else '' %>
-    /sys/partition:
+    /{api:sys}/partition:
       x-modules:
-        - path: sys/partitioner.js
+        - path: src/sys/partitioner.js
           options:
             partition_topic_name: 'change-prop.partitioned.mediawiki.job.refreshLinks'
             partition_key: database
