@@ -104,6 +104,7 @@ spec: &spec
 <%- endfor %>
               refreshLinks_partitioner:
                 topic: 'mediawiki.job.refreshLinks'
+                concurrency: 200
                 exec:
                   method: 'post'
                   uri: '/sys/partition/'
@@ -112,8 +113,8 @@ spec: &spec
                   body: '{{globals.message}}'
               refreshLinks:
                 topic: 'change-prop.partitioned.mediawiki.job.refreshLinks'
-                # Total concurrency of 120 divided by 8 partitions
-                concurrency: 15
+                # Total concurrency of 160 divided by 8 partitions
+                concurrency: 20
                 # Abandon jobs which root job is more then 1 week long
                 root_claim_ttl: 604800
                 exec:
