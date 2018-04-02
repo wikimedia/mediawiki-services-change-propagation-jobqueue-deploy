@@ -45,5 +45,11 @@ cirrus_search_jobs:
   - cirrusSearchLinksUpdatePrioritized
   - cirrusSearchMassIndex
   - cirrusSearchOtherIndex
+high_traffic_jobs:
+  - recentChangesUpdate
+  - categoryMembershipChange
+  - EchoNotificationDeleteJob
+  - ORESFetchScoreJob
+  - wikibase-InjectRCRecords
 
 
