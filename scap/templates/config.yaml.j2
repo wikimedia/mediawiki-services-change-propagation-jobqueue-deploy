@@ -142,23 +142,6 @@ spec: &spec
                     keepAlive: true
 <%- endfor %>
 # End of temporary section
-# Temporary section: Will be removed after all high traffic jobs are transferred
-<%- for job in high_traffic_jobs %>
-              <%= job %>:
-                topic: 'mediawiki.job.<%= job %>'
-                match:
-                  meta:
-                    domain: '/(?:^test\.wikipedia\.org$)|(?:^test2\.wikipedia\.org$)|(?:^mediawiki\.org$)|(?:^www\.mediawiki\.org$)|(?:^test\.wikidata\.org$)/'
-                exec:
-                  method: post
-                  uri: '<%= jobrunner_uri %>'
-                  headers:
-                    content-type: 'application/json'
-                  body: '{{globals.message}}'
-                  agentOptions:
-                    keepAlive: true
-<%- endfor %>
-# End of temporary section
 <%- else %>
               job:
                 topic: '/^mediawiki\.job\..*/'

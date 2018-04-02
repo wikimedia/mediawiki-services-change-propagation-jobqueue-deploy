@@ -20,14 +20,18 @@ redis_pass:
 env: production
 kafka_max_bytes: 4194304
 jobs_enabled:
+  categoryMembershipChange: {}
   cdnPurge: {}
   deleteLinks: {}
+  EchoNotificationDeleteJob: {}
   flaggedrevs_CacheUpdate: {}
   htmlCacheUpdate:
     # The avg exec time of the job is 60ms
     # so this gives us 150 jobs/s - 3 times the avg rate
     concurrency: 10
   MessageIndexRebuildJob: {}
+  ORESFetchScoreJob: {}
+  recentChangesUpdate: {}
   RecordLintJob:
     concurrency: 100
     consumer_batch_size: 10
@@ -35,6 +39,7 @@ jobs_enabled:
   refreshLinksPrioritized: {}
   updateBetaFeaturesUserCounts: {}
   wikibase-addUsagesForPage: {}
+  wikibase-InjectRCRecords: {}
 cirrus_search_jobs:
   - cirrusSearchCheckerJob
   - cirrusSearchDeleteArchive
@@ -45,11 +50,3 @@ cirrus_search_jobs:
   - cirrusSearchLinksUpdatePrioritized
   - cirrusSearchMassIndex
   - cirrusSearchOtherIndex
-high_traffic_jobs:
-  - recentChangesUpdate
-  - categoryMembershipChange
-  - EchoNotificationDeleteJob
-  - ORESFetchScoreJob
-  - wikibase-InjectRCRecords
-
-
