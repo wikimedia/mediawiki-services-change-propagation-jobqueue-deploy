@@ -144,6 +144,7 @@ spec: &spec
                 topics:
 <%- for topic in experimental_low_traffic_jobs %>
                   - '<%= topic %>'
+<%- endfor %>
                 match:
                   meta:
                     domain: '/(?:^test\.wikipedia\.org$)|(?:^test2\.wikipedia\.org$)|(?:^mediawiki\.org$)|(?:^www\.mediawiki\.org$)|(?:^test\.wikidata\.org$)/'
@@ -155,7 +156,6 @@ spec: &spec
                   body: '{{globals.message}}'
                   agentOptions:
                     keepAlive: true
-<%- endfor %>
 # End of temporary section
 # Temporary section: Will be removed after all cirrus search jobs are transferred
 <%- for job in cirrus_search_jobs %>
