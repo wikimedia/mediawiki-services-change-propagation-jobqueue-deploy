@@ -128,8 +128,8 @@ spec: &spec
 # Now special rule to cover all the low-traffic jobs
               low_traffic_jobs:
                 topics:
-<%- for topic in low_traffic_jobs %>
-                  - '<%= topic %>'
+<%- for job in low_traffic_jobs %>
+                  - 'mediawiki.job.<%= job %>'
 <%- endfor %>
                 exec:
                   method: post
@@ -142,8 +142,8 @@ spec: &spec
 # Temporary section: Will be removed after all experimental low-traffic jobs are transferred.
               experimental_low_traffic_jobs:
                 topics:
-<%- for topic in experimental_low_traffic_jobs %>
-                  - '<%= topic %>'
+<%- for job in experimental_low_traffic_jobs %>
+                  - 'mediawiki.job.<%= job %>'
 <%- endfor %>
                 match:
                   meta:
