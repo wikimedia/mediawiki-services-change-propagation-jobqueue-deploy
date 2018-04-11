@@ -47,17 +47,17 @@ cirrus_search_jobs:
   - cirrusSearchMassIndex
   - cirrusSearchOtherIndex
 low_traffic_jobs:
-  - deleteLinks
-  - flaggedrevs_CacheUpdate
-  - MessageIndexRebuildJob
-  - updateBetaFeaturesUserCounts
-experimental_low_traffic_jobs:
   - ChangeNotification
   - CognateCacheUpdateJob
   - CognateLocalJobSubmitJob
+  - deleteLinks
+  - flaggedrevs_CacheUpdate
   - globalUsageCachePurge
   - GlobalUserPageLocalJobSubmitJob
   - LocalGlobalUserPageCacheUpdateJob
+  - MessageIndexRebuildJob
   - TranslateDeleteJob
   - TranslateRenderJob
   - TranslationsUpdateJob
+  - updateBetaFeaturesUserCounts
+experimental_low_traffic_jobs: []
