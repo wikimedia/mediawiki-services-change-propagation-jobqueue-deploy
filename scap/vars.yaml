@@ -58,6 +58,6 @@ low_traffic_jobs:
   - MessageIndexRebuildJob
   - TranslateDeleteJob
   - TranslateRenderJob
-  - TranslationsUpdateJob
+  # T192107 - TranslationsUpdateJob
   - updateBetaFeaturesUserCounts
 experimental_low_traffic_jobs: []
