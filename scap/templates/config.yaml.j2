@@ -139,13 +139,26 @@ spec: &spec
                   body: '{{globals.message}}'
                   agentOptions:
                     keepAlive: true
-<%- if experimental_low_traffic_jobs|length != 0 %>
 # Temporary section: Will be removed after all experimental low-traffic jobs are transferred.
               experimental_low_traffic_jobs:
                 topics:
-<%- for job in experimental_low_traffic_jobs %>
+                  - '/^mediawiki\.job\..*/'
+                # Don't execute anything that's covered by different rules
+                exclude_topics:
+<%- for job in jobs_enabled.iterkeys() %>
                   - 'mediawiki.job.<%= job %>'
 <%- endfor %>
+<%- for job in low_traffic_jobs %>
+                  - 'mediawiki.job.<%= job %>'
+<%- endfor %>
+<%- for job in cirrus_search_jobs %>
+                  - 'mediawiki.job.<%= job %>'
+<%- endfor %>
+                  - 'mediawiki.job.TranslationsUpdateJob' #T192107
+                  - 'mediawiki.job.gwtoolsetUploadMediafileJob' #T192946
+                  - 'mediawiki.job.EchoNotificationJob' #T192945
+                  - 'mediawiki.job.webVideoTranscode' #T188947
+                  - 'mediawiki.job.webVideoTranscodePrioritized' #T188947
                 match:
                   meta:
                     domain: '/(?:^test\.wikipedia\.org$)|(?:^test2\.wikipedia\.org$)|(?:^mediawiki\.org$)|(?:^www\.mediawiki\.org$)|(?:^test\.wikidata\.org$)/'
@@ -158,7 +171,6 @@ spec: &spec
                   agentOptions:
                     keepAlive: true
 # End of temporary section
-<%- endif %>
 # Temporary section: Will be removed after all cirrus search jobs are transferred
 <%- for job in cirrus_search_jobs %>
               <%= job %>:
