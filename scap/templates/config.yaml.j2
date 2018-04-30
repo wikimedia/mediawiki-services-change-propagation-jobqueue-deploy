@@ -162,14 +162,13 @@ spec: &spec
                   - 'mediawiki.job.<%= job %>'
 <%- endfor %>
                   - 'mediawiki.job.refreshLinks' # has its own special rule
-                  - 'mediawiki.job.TranslationsUpdateJob' #T192107
                   - 'mediawiki.job.gwtoolsetUploadMediafileJob' #T192946
                   - 'mediawiki.job.EchoNotificationJob' #T192945
                   - 'mediawiki.job.webVideoTranscode' #T188947
                   - 'mediawiki.job.webVideoTranscodePrioritized' #T188947
-                match:
+                match_not:
                   meta:
-                    domain: '/(?:^test\.wikipedia\.org$)|(?:^test2\.wikipedia\.org$)|(?:^mediawiki\.org$)|(?:^www\.mediawiki\.org$)|(?:^test\.wikidata\.org$)/'
+                    domain: '/(?:^.*\.wikipedia\.org$)|(?:^commons\.wikimedia\.org$)|(?:^wikidata\.org$)|(?:^www\.wikidata\.org$)/'
                 exec:
                   method: post
                   uri: '<%= jobrunner_uri %>'
