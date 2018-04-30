@@ -55,6 +55,7 @@ low_traffic_jobs:
   - globalUsageCachePurge
   - GlobalUserPageLocalJobSubmitJob
   - LocalGlobalUserPageCacheUpdateJob
+  - LocalRenameUserJob
   - MessageIndexRebuildJob
   - TranslateDeleteJob
   - TranslateRenderJob
