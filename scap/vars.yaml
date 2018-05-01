@@ -19,6 +19,7 @@ redis_path: /var/run/redis.sock
 redis_pass:
 env: production
 kafka_max_bytes: 4194304
+kafka_compression_codec: snappy
 jobs_enabled:
   categoryMembershipChange: {}
   cdnPurge: {}
