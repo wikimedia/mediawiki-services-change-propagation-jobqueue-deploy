@@ -156,6 +156,7 @@ spec: &spec
 <%- for job in cirrus_search_jobs %>
                   - 'mediawiki.job.<%= job %>'
 <%- endfor %>
+                  - 'mediawiki.job.refreshLinks' # has its own special rule
                   - 'mediawiki.job.TranslationsUpdateJob' #T192107
                   - 'mediawiki.job.gwtoolsetUploadMediafileJob' #T192946
                   - 'mediawiki.job.EchoNotificationJob' #T192945
