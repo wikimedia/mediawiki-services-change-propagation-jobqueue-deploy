@@ -129,6 +129,11 @@ spec: &spec
                     keepAlive: true
 # Now special rule to cover all the low-traffic jobs
               low_traffic_jobs:
+                # Most of the topics are empty most of the time, so a lot of
+                # slots are just waiting for the `consume` method to timeout
+                # and do nothing. So a significantly higher concurrency is
+                # needed to account for that.
+                concurrency: 100
                 topics:
 <%- for job in low_traffic_jobs %>
                   - 'mediawiki.job.<%= job %>'
