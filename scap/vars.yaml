@@ -48,6 +48,10 @@ cirrus_search_jobs:
   - cirrusSearchMassIndex
   - cirrusSearchOtherIndex
 low_traffic_jobs:
+  - BounceHandlerJob
+  - BounceHandlerNotificationJob
+  - CentralAuthCreateLocalAccountJob
+  - CentralAuthUnattachUserJob
   - ChangeNotification
   - CognateCacheUpdateJob
   - CognateLocalJobSubmitJob
@@ -57,7 +61,10 @@ low_traffic_jobs:
   - GlobalUserPageLocalJobSubmitJob
   - LocalGlobalUserPageCacheUpdateJob
   - LocalRenameUserJob
+  - LocalSharedHelpPageCacheUpdateJob
   - MessageIndexRebuildJob
+  - MassMessageSubmitJob
+  - securePollPopulateVoterList
   - TranslateDeleteJob
   - TranslateRenderJob
   - updateBetaFeaturesUserCounts
