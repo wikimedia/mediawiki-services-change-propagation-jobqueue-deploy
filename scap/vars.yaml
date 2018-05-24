@@ -20,7 +20,7 @@ redis_pass:
 env: production
 kafka_max_bytes: 4194304
 kafka_compression_codec: snappy
-jobs_enabled:
+high_traffic_jobs_config:
   categoryMembershipChange: {}
   cdnPurge: {}
   EchoNotificationDeleteJob: {}
@@ -47,24 +47,3 @@ cirrus_search_jobs:
   - cirrusSearchLinksUpdatePrioritized
   - cirrusSearchMassIndex
   - cirrusSearchOtherIndex
-low_traffic_jobs:
-  - BounceHandlerJob
-  - BounceHandlerNotificationJob
-  - CentralAuthCreateLocalAccountJob
-  - CentralAuthUnattachUserJob
-  - ChangeNotification
-  - CognateCacheUpdateJob
-  - CognateLocalJobSubmitJob
-  - deleteLinks
-  - flaggedrevs_CacheUpdate
-  - globalUsageCachePurge
-  - GlobalUserPageLocalJobSubmitJob
-  - LocalGlobalUserPageCacheUpdateJob
-  - LocalRenameUserJob
-  - LocalSharedHelpPageCacheUpdateJob
-  - MessageIndexRebuildJob
-  - MassMessageSubmitJob
-  - securePollPopulateVoterList
-  - TranslateDeleteJob
-  - TranslateRenderJob
-  - updateBetaFeaturesUserCounts
