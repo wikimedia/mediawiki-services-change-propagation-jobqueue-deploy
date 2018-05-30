@@ -178,9 +178,11 @@ spec: &spec
 <%- for job in cirrus_search_jobs %>
               <%= job %>:
                 topic: 'mediawiki.job.<%= job %>'
-                match:
+                retry_limit: 0
+                reenqueue_delay: 3600 # Re-enqueue delayed jobs only once an hour. Needed for ElasticaWrite and Checker jobs
+                match_not:
                   meta:
-                    domain: '/(?:^test\.wikipedia\.org$)|(?:^test2\.wikipedia\.org$)|(?:^mediawiki\.org$)|(?:^www\.mediawiki\.org$)|(?:^test\.wikidata\.org$)/'
+                    domain: '/(?:^.*\.wikipedia\.org$)|(?:^commons\.wikimedia\.org$)|(?:^wikidata\.org$)|(?:^www\.wikidata\.org$)/'
                 exec:
                   method: post
                   uri: '<%= jobrunner_uri %>'
