@@ -127,6 +127,22 @@ spec: &spec
                   body: '{{globals.message}}'
                   agentOptions:
                     keepAlive: true
+# Videoscaler jobs need to have special rules since then need to go to a different LVS
+<%- for topic, topic_config in videoscaler_jobs_config.iteritems() %>
+              <%= topic %>:
+                topic: 'mediawiki.job.<%= topic %>'
+<%- for key, value in topic_config.iteritems() %>
+                <%= key %>: <%= value %>
+<%- endfor %>
+                exec:
+                  method: post
+                  uri: '<%= videoscaler_uri %>'
+                  headers:
+                    content-type: 'application/json'
+                  body: '{{globals.message}}'
+                  agentOptions:
+                    keepAlive: true
+<%- endfor %>
 # Now special rule to cover all the low-traffic jobs
               low_traffic_jobs:
                 # Most of the topics are empty most of the time, so a lot of
@@ -144,11 +160,12 @@ spec: &spec
 <%- for job in cirrus_search_jobs %>
                   - 'mediawiki.job.<%= job %>'
 <%- endfor %>
+<%- for job in videoscaler_jobs_config.iterkeys() %>
+                  - 'mediawiki.job.<%= job %>'
+<%- endfor %>
                   - 'mediawiki.job.refreshLinks' # has its own special rule
                   - 'mediawiki.job.gwtoolsetUploadMediafileJob' #T192946
                   - 'mediawiki.job.EchoNotificationJob' #T192945
-                  - 'mediawiki.job.webVideoTranscode' #T188947
-                  - 'mediawiki.job.webVideoTranscodePrioritized' #T188947
                 exec:
                   method: post
                   uri: '<%= jobrunner_uri %>'
