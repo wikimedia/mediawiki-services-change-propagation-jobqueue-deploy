@@ -15,7 +15,6 @@ site: datacenter1
 broker_list: localhost:9092
 jobrunner_uri: http://localhost/rpc/RunSingleJob.php
 videoscaler_uri: http://localhost/rpc/RunSingleJob.php
-videoscaler_timeout: 86400000
 concurrency: 30
 redis_path: /var/run/redis.sock
 redis_pass:
@@ -39,18 +38,31 @@ high_traffic_jobs_config:
   refreshLinksPrioritized: {}
   wikibase-addUsagesForPage: {}
   wikibase-InjectRCRecords: {}
+  # For cirrus search jobs the retries are built into the job itself,
+  # so disable the retries by changeprop.
+  cirrusSearchCheckerJob:
+    reenqueue_delay: 3600
+    retry_limit: 0
+  cirrusSearchDeleteArchive:
+    retry_limit: 0
+  cirrusSearchDeletePages:
+    retry_limit: 0
+  cirrusSearchElasticaWrite:
+    reenqueue_delay: 3600
+    retry_limit: 0
+  cirrusSearchIncomingLinkCount:
+    retry_limit: 0
+    concurrency: 50
+  cirrusSearchLinksUpdate:
+    retry_limit: 0
+  cirrusSearchLinksUpdatePrioritized:
+    retry_limit: 0
+    concurrency: 50
+  cirrusSearchOtherIndex:
+    retry_limit: 0
 videoscaler_jobs_config:
   webVideoTranscode:
     timeout: 86400000
   webVideoTranscodePrioritized:
     timeout: 86400000
-cirrus_search_jobs:
-  - cirrusSearchCheckerJob
-  - cirrusSearchDeleteArchive
-  - cirrusSearchDeletePages
-  - cirrusSearchElasticaWrite
-  - cirrusSearchIncomingLinkCount
-  - cirrusSearchLinksUpdate
-  - cirrusSearchLinksUpdatePrioritized
-  - cirrusSearchMassIndex
-  - cirrusSearchOtherIndex
+

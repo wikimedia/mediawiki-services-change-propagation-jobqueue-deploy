@@ -157,9 +157,6 @@ spec: &spec
 <%- for job in high_traffic_jobs_config.iterkeys() %>
                   - 'mediawiki.job.<%= job %>'
 <%- endfor %>
-<%- for job in cirrus_search_jobs %>
-                  - 'mediawiki.job.<%= job %>'
-<%- endfor %>
 <%- for job in videoscaler_jobs_config.iterkeys() %>
                   - 'mediawiki.job.<%= job %>'
 <%- endfor %>
@@ -174,25 +171,6 @@ spec: &spec
                   body: '{{globals.message}}'
                   agentOptions:
                     keepAlive: true
-# Temporary section: Will be removed after all cirrus search jobs are transferred
-<%- for job in cirrus_search_jobs %>
-              <%= job %>:
-                topic: 'mediawiki.job.<%= job %>'
-                retry_limit: 0
-                reenqueue_delay: 3600 # Re-enqueue delayed jobs only once an hour. Needed for ElasticaWrite and Checker jobs
-                match_not:
-                  meta:
-                    domain: '/(?:^.*\.wikipedia\.org$)|(?:^commons\.wikimedia\.org$)|(?:^wikidata\.org$)|(?:^www\.wikidata\.org$)/'
-                exec:
-                  method: post
-                  uri: '<%= jobrunner_uri %>'
-                  headers:
-                    content-type: 'application/json'
-                  body: '{{globals.message}}'
-                  agentOptions:
-                    keepAlive: true
-<%- endfor %>
-# End of temporary section
 <%- else %>
               job:
                 topic: '/^mediawiki\.job\..*/'
