@@ -15,6 +15,7 @@ site: datacenter1
 broker_list: localhost:9092
 jobrunner_uri: http://localhost/rpc/RunSingleJob.php
 videoscaler_uri: http://localhost/rpc/RunSingleJob.php
+videoscaler_timeout: 86400000
 concurrency: 30
 redis_path: /var/run/redis.sock
 redis_pass:
@@ -39,8 +40,10 @@ high_traffic_jobs_config:
   wikibase-addUsagesForPage: {}
   wikibase-InjectRCRecords: {}
 videoscaler_jobs_config:
-  webVideoTranscode: {}
-  webVideoTranscodePrioritized: {}
+  webVideoTranscode:
+    timeout: 86400000
+  webVideoTranscodePrioritized:
+    timeout: 86400000
 cirrus_search_jobs:
   - cirrusSearchCheckerJob
   - cirrusSearchDeleteArchive
