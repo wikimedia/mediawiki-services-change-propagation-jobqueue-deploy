@@ -43,6 +43,7 @@ high_traffic_jobs_config:
   cirrusSearchCheckerJob:
     reenqueue_delay: 3600
     retry_limit: 0
+    concurrency: 15
   cirrusSearchDeleteArchive:
     retry_limit: 0
   cirrusSearchDeletePages:
@@ -57,7 +58,7 @@ high_traffic_jobs_config:
     retry_limit: 0
   cirrusSearchLinksUpdatePrioritized:
     retry_limit: 0
-    concurrency: 50
+    concurrency: 100 # Avg. rate 150, Avg. exec time 0.5s
   cirrusSearchOtherIndex:
     retry_limit: 0
 videoscaler_jobs_config:
