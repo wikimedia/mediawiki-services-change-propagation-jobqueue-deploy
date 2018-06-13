@@ -41,7 +41,7 @@ high_traffic_jobs_config:
   # For cirrus search jobs the retries are built into the job itself,
   # so disable the retries by changeprop.
   cirrusSearchCheckerJob:
-    reenqueue_delay: 3600
+    reenqueue_delay: 600
     retry_limit: 0
     concurrency: 15
   cirrusSearchDeleteArchive:
