@@ -161,8 +161,6 @@ spec: &spec
                   - 'mediawiki.job.<%= job %>'
 <%- endfor %>
                   - 'mediawiki.job.refreshLinks' # has its own special rule
-                  - 'mediawiki.job.gwtoolsetUploadMediafileJob' #T192946
-                  - 'mediawiki.job.EchoNotificationJob' #T192945
                 exec:
                   method: post
                   uri: '<%= jobrunner_uri %>'
