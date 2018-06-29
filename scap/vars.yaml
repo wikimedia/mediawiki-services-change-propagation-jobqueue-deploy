@@ -41,8 +41,12 @@ high_traffic_jobs_config:
   # For cirrus search jobs the retries are built into the job itself,
   # so disable the retries by changeprop.
   cirrusSearchCheckerJob:
-    reenqueue_delay: 600
+    disable_delayed_execution: true #T198462
     retry_limit: 0
+    # The job is posted by the cron script executing every 2 hours.
+    # About 120.000 jobs posted by each cron execution and we want to spread them over 2 hours.
+    # Mean exec time for the job is about 600ms.
+    # 120000 / 7200 * 0.6 = 10
     concurrency: 10
   cirrusSearchDeleteArchive:
     retry_limit: 0
