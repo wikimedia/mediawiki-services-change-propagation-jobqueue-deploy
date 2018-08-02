@@ -43,7 +43,7 @@ high_traffic_jobs_config:
   cirrusSearchCheckerJob:
     disable_delayed_execution: true #T198462
     retry_limit: 0
-    concurrency: 6
+    concurrency: 10
   cirrusSearchDeleteArchive:
     retry_limit: 0
   cirrusSearchDeletePages:
