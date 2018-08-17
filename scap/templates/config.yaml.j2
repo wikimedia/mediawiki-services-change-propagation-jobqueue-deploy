@@ -106,7 +106,7 @@ spec: &spec
 <%- endfor %>
               refreshLinks_partitioner:
                 topic: 'mediawiki.job.refreshLinks'
-                concurrency: 200
+                concurrency: <%= refresh_links_partitioner_concurrency %>
                 exec:
                   method: 'post'
                   uri: '/sys/partition/'
@@ -116,7 +116,7 @@ spec: &spec
               refreshLinks:
                 topic: 'change-prop.partitioned.mediawiki.job.refreshLinks'
                 # Total concurrency of 160 divided by 8 partitions
-                concurrency: 20
+                concurrency: <%= refresh_links_partition_concurrency %>
                 # Abandon jobs which root job is more then 1 week long
                 root_claim_ttl: 604800
                 exec:
@@ -145,11 +145,7 @@ spec: &spec
 <%- endfor %>
 # Now special rule to cover all the low-traffic jobs
               low_traffic_jobs:
-                # Most of the topics are empty most of the time, so a lot of
-                # slots are just waiting for the `consume` method to timeout
-                # and do nothing. So a significantly higher concurrency is
-                # needed to account for that.
-                concurrency: 100
+                concurrency: <%= low_traffic_concurrency %>
                 topics:
                   - '/^mediawiki\.job\..*/'
                 # Don't execute anything that's covered by different rules

@@ -15,55 +15,84 @@ site: datacenter1
 broker_list: localhost:9092
 jobrunner_uri: http://localhost/rpc/RunSingleJob.php
 videoscaler_uri: http://localhost/rpc/RunSingleJob.php
-concurrency: 30
 redis_path: /var/run/redis.sock
 redis_pass:
 env: production
 kafka_max_bytes: 4194304
 kafka_compression_codec: snappy
+# The default concurrency is used whenever no specific settings are set for a job.
+concurrency: 10
+# All the jobs listed below get their own rule, which transfers to
+# their own processing unit - each type of job listed explicitly is processed
+# by a separate worker in change-prop.
 high_traffic_jobs_config:
+  ThumbnailRender:
+    concurrency: 20
   categoryMembershipChange: {}
-  cdnPurge: {}
-  EchoNotificationDeleteJob: {}
-  htmlCacheUpdate:
-    # The avg exec time of the job is 60ms
-    # so this gives us 150 jobs/s - 3 times the avg rate
-    concurrency: 10
-  ORESFetchScoreJob: {}
-  recentChangesUpdate: {}
+  # CNDPurge is quite low-volume, but it uses delayed execution,
+  # so avoid putting it together with other low-volume jobs so that it doesn't
+  # block execution for others.
+  cdnPurge:
+    concurrency: 5
+  ORESFetchScoreJob:
+    concurrency: 15
+  # The avg exec time of the job is 60ms
+  # so this gives us 150 jobs/s - 3 times the avg rate
+  htmlCacheUpdate: {}
+  # RecordLinks is normally low-volume, but could have big spikes
+  # when maintenance scripts are run. Elevated concurrency
   RecordLintJob:
-    concurrency: 100
+    concurrency: 50
     consumer_batch_size: 10
-  refreshLinksDynamic: {}
-  refreshLinksPrioritized: {}
   wikibase-addUsagesForPage: {}
-  wikibase-InjectRCRecords: {}
   # For cirrus search jobs the retries are built into the job itself,
-  # so disable the retries by changeprop.
+  # so disable the retries by change-prop. We need special rules for cirrus
+  # jobs because they need special configuration.
   cirrusSearchCheckerJob:
     disable_delayed_execution: true #T198462
     retry_limit: 0
-    concurrency: 10
   cirrusSearchDeleteArchive:
     retry_limit: 0
+    concurrency: 5
   cirrusSearchDeletePages:
     retry_limit: 0
+    concurrency: 5
   cirrusSearchElasticaWrite:
     reenqueue_delay: 3600
     retry_limit: 0
   cirrusSearchIncomingLinkCount:
     retry_limit: 0
-    concurrency: 50
+    concurrency: 15
   cirrusSearchLinksUpdate:
     retry_limit: 0
+    concurrency: 5
   cirrusSearchLinksUpdatePrioritized:
     retry_limit: 0
-    concurrency: 150 # Avg. rate 150, Avg. exec time 0.7s
+    concurrency: 100
   cirrusSearchOtherIndex:
     retry_limit: 0
+    concurrency: 5
+# Videoscaler jobs point to a different LVS, so they need special treatment
+# as well - thus special rules.
 videoscaler_jobs_config:
   webVideoTranscode:
     timeout: 86400000
+    concurrency: 50
   webVideoTranscodePrioritized:
     timeout: 86400000
-
+# refreshLinks job is an exception, because it's split into 8 partitions
+# according the MariaDB shards. This is the concurrency for the partitioner
+# itself, it's does not actually touch Mediawiki, only re-enqueues the
+# jobs according to proper partitions
+refresh_links_partitioner_concurrency: 200
+# This is the concurrency of the individual partitions, so overall concurrency
+# is 8 * 20 = 160
+refresh_links_partition_concurrency: 20
+# All the jobs not explicitly specified in the config are combined into the
+# `low_traffic_jobs` rule, so they share a worker. The low_traffic_concurrency
+# is shared between all the jobs other then the exceptions listed above.
+#
+# Most of the topics are empty most of the time, so a lot of slots are just waiting
+# for the `consume` method to timeout and do nothing.
+# So a significantly higher concurrency is needed to account for that.
+low_traffic_concurrency: 50
