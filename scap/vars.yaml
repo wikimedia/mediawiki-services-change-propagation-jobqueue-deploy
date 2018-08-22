@@ -35,7 +35,7 @@ high_traffic_jobs_config:
   cdnPurge:
     concurrency: 5
   ORESFetchScoreJob:
-    concurrency: 15
+    concurrency: 20
   # The avg exec time of the job is 60ms
   # so this gives us 150 jobs/s - 3 times the avg rate
   htmlCacheUpdate: {}
@@ -44,7 +44,8 @@ high_traffic_jobs_config:
   RecordLintJob:
     concurrency: 50
     consumer_batch_size: 10
-  wikibase-addUsagesForPage: {}
+  wikibase-addUsagesForPage:
+    concurrency: 30
   # For cirrus search jobs the retries are built into the job itself,
   # so disable the retries by change-prop. We need special rules for cirrus
   # jobs because they need special configuration.
@@ -68,7 +69,7 @@ high_traffic_jobs_config:
     concurrency: 5
   cirrusSearchLinksUpdatePrioritized:
     retry_limit: 0
-    concurrency: 100
+    concurrency: 150
   cirrusSearchOtherIndex:
     retry_limit: 0
     concurrency: 5
@@ -79,6 +80,7 @@ videoscaler_jobs_config:
     timeout: 86400000
     concurrency: 50
   webVideoTranscodePrioritized:
+    concurrency: 30
     timeout: 86400000
 # refreshLinks job is an exception, because it's split into 8 partitions
 # according the MariaDB shards. This is the concurrency for the partitioner
