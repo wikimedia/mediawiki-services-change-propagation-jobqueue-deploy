@@ -47,6 +47,8 @@ high_traffic_jobs_config:
     consumer_batch_size: 10
   wikibase-addUsagesForPage:
     concurrency: 30
+  constraintsRunCheck:
+    concurrency: 30
   # For cirrus search jobs the retries are built into the job itself,
   # so disable the retries by change-prop. We need special rules for cirrus
   # jobs because they need special configuration.
