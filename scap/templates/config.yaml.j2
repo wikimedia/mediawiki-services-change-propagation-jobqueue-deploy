@@ -87,6 +87,8 @@ spec: &spec
               compression.codec: <%= kafka_compression_codec %>
             concurrency: <%= concurrency %>
             startup_delay: 60000
+            disable_blacklist: true
+            disable_ratelimit: true
             templates:
 <%- if env == 'production' %>
 <%- for topic, topic_config in high_traffic_jobs_config.iteritems() %>
