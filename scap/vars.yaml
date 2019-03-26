@@ -83,7 +83,7 @@ videoscaler_jobs_config:
     concurrency: 30
     timeout: 86400000
 # Some jobs require partitioning according to MariaDB shards.
-partitioned_jobs:
+partitioned_jobs_config:
   refreshLinks:
     # This is the concurrency for the partitioner
     # itself, it's does not actually touch Mediawiki, only re-enqueues the

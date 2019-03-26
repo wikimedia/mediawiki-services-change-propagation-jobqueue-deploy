@@ -84,6 +84,10 @@ spec: &spec
               # so we increase the max message size in kafka and have to
               # ajust the consumers accordingly.
               fetch.message.max.bytes: <%= kafka_max_bytes %>
+              # TEMP!
+              default_topic_conf:
+                auto.offset.reset: smallest
+              # END TEMP!
             producer:
               compression.codec: <%= kafka_compression_codec %>
             concurrency: <%= concurrency %>
@@ -107,20 +111,20 @@ spec: &spec
                   agentOptions:
                     keepAlive: true
 <%- endfor %>
-              refreshLinks_partitioner:
-                topic: 'mediawiki.job.refreshLinks'
-                concurrency: 200
+<%- for topic, options in partitioned_jobs_config.iteritems() %>
+              <%= topic %>_partitioner:
+                topic: 'mediawiki.job.<%= topic %>'
+                concurrency: <%= options.partitioner_concurrency %>
                 exec:
                   method: 'post'
                   uri: '/sys/partition/'
                   headers:
                     content-type: application/json
                   body: '{{globals.message}}'
-              refreshLinks:
-                # TODO: Only temporary for a little to clear the backlog
-                topic: 'change-prop.partitioned.mediawiki.job.refreshLinks'
-                # Total concurrency of 160 divided by 8 partitions
-                concurrency: 20
+              <%= topic %>:
+                topic: 'cpjobqueue.partitioned.mediawiki.job.<%= topic %>'
+                # Total concurrency divided by 8 partitions
+                concurrency: <%= options.partition_concurrency %>
                 # Abandon jobs which root job is more then 1 week long
                 root_claim_ttl: 604800
                 exec:
@@ -131,30 +135,7 @@ spec: &spec
                   body: '{{globals.message}}'
                   agentOptions:
                     keepAlive: true
-              # TODO. This will be switched to iteration over vars.yaml
-              htmlCacheUpdate_partitioner:
-                topic: 'mediawiki.job.htmlCacheUpdate'
-                concurrency: 20
-                exec:
-                  method: 'post'
-                  uri: '/sys/partition/'
-                  headers:
-                    content-type: application/json
-                  body: '{{globals.message}}'
-              htmlCacheUpdate:
-                topic: 'cpjobqueue.partitioned.mediawiki.job.htmlCacheUpdate'
-                # Total concurrency of 160 divided by 8 partitions
-                concurrency: 2
-                # Abandon jobs which root job is more then 1 week long
-                root_claim_ttl: 604800
-                exec:
-                  method: post
-                  uri: '<%= jobrunner_uri %>'
-                  headers:
-                    content-type: application/json
-                  body: '{{globals.message}}'
-                  agentOptions:
-                    keepAlive: true
+<%- endfor %>
 # Videoscaler jobs need to have special rules since then need to go to a different LVS
 <%- for topic, topic_config in videoscaler_jobs_config.iteritems() %>
               <%= topic %>:
@@ -184,8 +165,9 @@ spec: &spec
 <%- for job in videoscaler_jobs_config.iterkeys() %>
                   - 'mediawiki.job.<%= job %>'
 <%- endfor %>
-                  - 'mediawiki.job.refreshLinks' # has its own special rule
-                  - 'mediawiki.job.htmlCacheUpdate' # has its own special rule
+<%- for job in partitioned_jobs_config.iterkeys() %>
+                  - 'mediawiki.job.<%= job %>'
+<%- endfor %>
                 exec:
                   method: post
                   uri: '<%= jobrunner_uri %>'
