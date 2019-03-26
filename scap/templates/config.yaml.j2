@@ -22,7 +22,8 @@ spec: &spec
       x-modules:
         - path: src/sys/partitioner.js
           options:
-            partition_topic_name: 'change-prop.partitioned.mediawiki.job.refreshLinks'
+            templates:
+              partition_topic: 'cpjobqueue.partitioned.{{message.meta.topic}}'
             partition_key: database
             partition_default: 2
             partition_map:
@@ -108,7 +109,7 @@ spec: &spec
 <%- endfor %>
               refreshLinks_partitioner:
                 topic: 'mediawiki.job.refreshLinks'
-                concurrency: <%= refresh_links_partitioner_concurrency %>
+                concurrency: 200
                 exec:
                   method: 'post'
                   uri: '/sys/partition/'
@@ -116,9 +117,34 @@ spec: &spec
                     content-type: application/json
                   body: '{{globals.message}}'
               refreshLinks:
+                # TODO: Only temporary for a little to clear the backlog
                 topic: 'change-prop.partitioned.mediawiki.job.refreshLinks'
                 # Total concurrency of 160 divided by 8 partitions
-                concurrency: <%= refresh_links_partition_concurrency %>
+                concurrency: 20
+                # Abandon jobs which root job is more then 1 week long
+                root_claim_ttl: 604800
+                exec:
+                  method: post
+                  uri: '<%= jobrunner_uri %>'
+                  headers:
+                    content-type: application/json
+                  body: '{{globals.message}}'
+                  agentOptions:
+                    keepAlive: true
+              # TODO. This will be switched to iteration over vars.yaml
+              htmlCacheUpdate_partitioner:
+                topic: 'mediawiki.job.htmlCacheUpdate'
+                concurrency: 20
+                exec:
+                  method: 'post'
+                  uri: '/sys/partition/'
+                  headers:
+                    content-type: application/json
+                  body: '{{globals.message}}'
+              htmlCacheUpdate:
+                topic: 'cpjobqueue.partitioned.mediawiki.job.htmlCacheUpdate'
+                # Total concurrency of 160 divided by 8 partitions
+                concurrency: 2
                 # Abandon jobs which root job is more then 1 week long
                 root_claim_ttl: 604800
                 exec:
