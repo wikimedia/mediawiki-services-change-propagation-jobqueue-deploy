@@ -185,6 +185,7 @@ spec: &spec
                   - 'mediawiki.job.<%= job %>'
 <%- endfor %>
                   - 'mediawiki.job.refreshLinks' # has its own special rule
+                  - 'mediawiki.job.htmlCacheUpdate' # has its own special rule
                 exec:
                   method: post
                   uri: '<%= jobrunner_uri %>'
