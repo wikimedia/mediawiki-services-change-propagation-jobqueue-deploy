@@ -95,8 +95,10 @@ partitioned_jobs_config:
   htmlCacheUpdate:
     partitioner_concurrency: 50
     # This is the concurrency of the individual partitions, so overall concurrency
-    # is 8 * 2 = 16
-    partition_concurrency: 2
+    # is 8 * 4 = 32
+    # The load of htmlCacheUpdate is uneven across partitions, so we are using a bit
+    # higher overall concurrency then needed.
+    partition_concurrency: 4
 # All the jobs not explicitly specified in the config are combined into the
 # `low_traffic_jobs` rule, so they share a worker. The low_traffic_concurrency
 # is shared between all the jobs other then the exceptions listed above.
