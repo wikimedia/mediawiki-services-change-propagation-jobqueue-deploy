@@ -37,9 +37,6 @@ high_traffic_jobs_config:
     concurrency: 5
   ORESFetchScoreJob:
     concurrency: 20
-  # The avg exec time of the job is 60ms
-  # so this gives us 150 jobs/s - 3 times the avg rate
-  htmlCacheUpdate: {}
   # RecordLinks is normally low-volume, but could have big spikes
   # when maintenance scripts are run. Elevated concurrency
   RecordLintJob:
@@ -85,14 +82,21 @@ videoscaler_jobs_config:
   webVideoTranscodePrioritized:
     concurrency: 30
     timeout: 86400000
-# refreshLinks job is an exception, because it's split into 8 partitions
-# according the MariaDB shards. This is the concurrency for the partitioner
-# itself, it's does not actually touch Mediawiki, only re-enqueues the
-# jobs according to proper partitions
-refresh_links_partitioner_concurrency: 200
-# This is the concurrency of the individual partitions, so overall concurrency
-# is 8 * 20 = 160
-refresh_links_partition_concurrency: 20
+# Some jobs require partitioning according to MariaDB shards.
+partitioned_jobs:
+  refreshLinks:
+    # This is the concurrency for the partitioner
+    # itself, it's does not actually touch Mediawiki, only re-enqueues the
+    # jobs according to proper partitions
+    partitioner_concurrency: 200
+    # This is the concurrency of the individual partitions, so overall concurrency
+    # is 8 * 20 = 160
+    partition_concurrency: 20
+  htmlCacheUpdate:
+    partitioner_concurrency: 50
+    # This is the concurrency of the individual partitions, so overall concurrency
+    # is 8 * 2 = 16
+    partition_concurrency: 2
 # All the jobs not explicitly specified in the config are combined into the
 # `low_traffic_jobs` rule, so they share a worker. The low_traffic_concurrency
 # is shared between all the jobs other then the exceptions listed above.
