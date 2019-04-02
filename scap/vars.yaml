@@ -1,8 +1,7 @@
 # log-related variables
 log_name: cpjobqueue
-logstash_host: localhost
-logstash_port: 12201
 log_file: /tmp/cpjq.log
+rsyslog_port: 10514
 # metrics
 metrics_name: cpjobqueue
 metrics_host: localhost
