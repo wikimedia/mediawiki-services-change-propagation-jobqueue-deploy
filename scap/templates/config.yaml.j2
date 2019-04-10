@@ -172,14 +172,46 @@ spec: &spec
 <%- for job in partitioned_jobs_config.iterkeys() %>
                   - 'mediawiki.job.<%= job %>'
 <%- endfor %>
-                exec:
-                  method: post
-                  uri: '<%= jobrunner_uri %>'
-                  headers:
-                    content-type: 'application/json'
-                  body: '{{globals.message}}'
-                  agentOptions:
-                    keepAlive: true
+# Temporary while we are switching the jobs to PHP7 we need 2 cases.
+# After all low-traffic jobs are switched, we can remove the cases
+# and the php7 config variable and uncomment the code in the end of the
+# temporary section.
+                cases:
+<% if low_traffic_php7_enabled|length > 0 %>
+                  - match_not:
+<%- for job in low_traffic_php7_enabled %>
+                    - meta:
+                        topic: 'mediawiki.job.<%= job %>'
+<%- endfor %>
+                    exec:
+                      method: post
+                      uri: '<%= jobrunner_uri %>'
+                      headers:
+                        content-type: 'application/json'
+                      body: '{{globals.message}}'
+                      agentOptions:
+                        keepAlive: true
+<%- endif %>
+                  - exec:
+                      method: post
+                      uri: '<%= jobrunner_uri %>'
+                      headers:
+                        content-type: 'application/json'
+                        cookie: 'PHP_ENGINE=php7'
+                      body: '{{globals.message}}'
+                      agentOptions:
+                        keepAlive: true
+# End of temporary code
+#                exec:
+#                  method: post
+#                  uri: '<%= jobrunner_uri %>'
+#                  headers:
+#                    content-type: 'application/json'
+#                    cookie: 'PHP_ENGINE=php7'
+#                  body: '{{globals.message}}'
+#                  agentOptions:
+#                    keepAlive: true
+# End of temporary commented-out code.
 <%- else %>
               job:
                 topic: '/^mediawiki\.job\..*/'
