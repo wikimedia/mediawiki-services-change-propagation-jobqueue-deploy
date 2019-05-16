@@ -110,5 +110,7 @@ low_traffic_concurrency: 50
 # eventually switch all the jobs to using PHP7. For all the jobs that use their own
 # special configs this list is not needed as the PHP7 cookie can be specified directly
 # in the job definition.
-low_traffic_php7_enabled: []
+low_traffic_php7_enabled:
+  - updateBetaFeaturesUserCounts
+
 
