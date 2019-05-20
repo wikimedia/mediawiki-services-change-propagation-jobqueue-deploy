@@ -104,13 +104,19 @@ spec: &spec
               <%= topic %>:
                 topic: 'mediawiki.job.<%= topic %>'
 <%- for key, value in topic_config.iteritems() %>
+# Temporary if till the end of php 7 migration
+<%- if key != 'php7' %>
                 <%= key %>: <%= value %>
+<%- endif %>
 <%- endfor %>
                 exec:
                   method: post
                   uri: '<%= jobrunner_uri %>'
                   headers:
                     content-type: 'application/json'
+<%- if topic_config.php7 %>
+                    cookie: 'PHP_ENGINE=php7'
+<%- endif %>
                   body: '{{globals.message}}'
                   agentOptions:
                     keepAlive: true

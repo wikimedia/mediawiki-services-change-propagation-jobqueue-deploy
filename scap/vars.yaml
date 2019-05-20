@@ -41,6 +41,7 @@ high_traffic_jobs_config:
   RecordLintJob:
     concurrency: 50
     consumer_batch_size: 10
+    php7: true
   wikibase-addUsagesForPage:
     concurrency: 30
   constraintsRunCheck:
