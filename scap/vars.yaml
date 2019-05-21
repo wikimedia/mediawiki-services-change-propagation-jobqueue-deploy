@@ -99,6 +99,7 @@ partitioned_jobs_config:
     # The load of htmlCacheUpdate is uneven across partitions, so we are using a bit
     # higher overall concurrency then needed.
     partition_concurrency: 4
+    php7: true
 # All the jobs not explicitly specified in the config are combined into the
 # `low_traffic_jobs` rule, so they share a worker. The low_traffic_concurrency
 # is shared between all the jobs other then the exceptions listed above.

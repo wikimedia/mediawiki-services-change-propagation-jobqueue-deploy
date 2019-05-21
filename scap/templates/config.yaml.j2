@@ -142,6 +142,9 @@ spec: &spec
                   uri: '<%= jobrunner_uri %>'
                   headers:
                     content-type: application/json
+<%- if options.php7 %>
+                    cookie: 'PHP_ENGINE=php7'
+<%- endif %>
                   body: '{{globals.message}}'
                   agentOptions:
                     keepAlive: true
