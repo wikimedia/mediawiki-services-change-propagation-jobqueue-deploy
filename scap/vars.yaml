@@ -44,6 +44,7 @@ high_traffic_jobs_config:
     php7: true
   wikibase-addUsagesForPage:
     concurrency: 30
+    php7: true
   constraintsRunCheck:
     concurrency: 30
   # For cirrus search jobs the retries are built into the job itself,
