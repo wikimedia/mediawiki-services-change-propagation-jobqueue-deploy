@@ -36,6 +36,7 @@ high_traffic_jobs_config:
     concurrency: 5
   ORESFetchScoreJob:
     concurrency: 20
+    php7: true
   # RecordLinks is normally low-volume, but could have big spikes
   # when maintenance scripts are run. Elevated concurrency
   RecordLintJob:
