@@ -116,5 +116,4 @@ low_traffic_concurrency: 50
 # in the job definition.
 low_traffic_php7_enabled:
   - updateBetaFeaturesUserCounts
-
-
+  - recentChangesUpdate
