@@ -42,7 +42,7 @@ high_traffic_jobs_config:
     concurrency: 50
     consumer_batch_size: 10
   wikibase-addUsagesForPage:
-    concurrency: 30
+    concurrency: 5
   constraintsRunCheck:
     concurrency: 30
   # For cirrus search jobs the retries are built into the job itself,
