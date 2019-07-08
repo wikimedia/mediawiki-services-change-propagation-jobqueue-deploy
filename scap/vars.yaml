@@ -94,6 +94,7 @@ partitioned_jobs_config:
     # This is the concurrency of the individual partitions, so overall concurrency
     # is 8 * 20 = 160
     partition_concurrency: 20
+    php7: true
   htmlCacheUpdate:
     partitioner_concurrency: 50
     # This is the concurrency of the individual partitions, so overall concurrency
