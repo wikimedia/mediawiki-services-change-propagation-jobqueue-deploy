@@ -36,16 +36,13 @@ high_traffic_jobs_config:
     concurrency: 5
   ORESFetchScoreJob:
     concurrency: 20
-    php7: true
   # RecordLinks is normally low-volume, but could have big spikes
   # when maintenance scripts are run. Elevated concurrency
   RecordLintJob:
     concurrency: 50
     consumer_batch_size: 10
-    php7: true
   wikibase-addUsagesForPage:
     concurrency: 30
-    php7: true
   constraintsRunCheck:
     concurrency: 30
   # For cirrus search jobs the retries are built into the job itself,
@@ -54,35 +51,27 @@ high_traffic_jobs_config:
   cirrusSearchCheckerJob:
     disable_delayed_execution: true #T198462
     retry_limit: 0
-    php7: true
   cirrusSearchDeleteArchive:
     retry_limit: 0
     concurrency: 5
-    php7: true
   cirrusSearchDeletePages:
     retry_limit: 0
     concurrency: 5
-    php7: true
   cirrusSearchElasticaWrite:
     reenqueue_delay: 3600
     retry_limit: 0
-    php7: true
   cirrusSearchIncomingLinkCount:
     retry_limit: 0
     concurrency: 15
-    php7: true
   cirrusSearchLinksUpdate:
     retry_limit: 0
     concurrency: 100
-    php7: true
   cirrusSearchLinksUpdatePrioritized:
     retry_limit: 0
     concurrency: 150
-    php7: true
   cirrusSearchOtherIndex:
     retry_limit: 0
     concurrency: 5
-    php7: true
 # Videoscaler jobs point to a different LVS, so they need special treatment
 # as well - thus special rules.
 videoscaler_jobs_config:
@@ -102,7 +91,6 @@ partitioned_jobs_config:
     # This is the concurrency of the individual partitions, so overall concurrency
     # is 8 * 20 = 160
     partition_concurrency: 20
-    php7: true
   htmlCacheUpdate:
     partitioner_concurrency: 50
     # This is the concurrency of the individual partitions, so overall concurrency
@@ -110,7 +98,6 @@ partitioned_jobs_config:
     # The load of htmlCacheUpdate is uneven across partitions, so we are using a bit
     # higher overall concurrency then needed.
     partition_concurrency: 4
-    php7: true
 # All the jobs not explicitly specified in the config are combined into the
 # `low_traffic_jobs` rule, so they share a worker. The low_traffic_concurrency
 # is shared between all the jobs other then the exceptions listed above.
