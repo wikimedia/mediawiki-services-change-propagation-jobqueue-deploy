@@ -106,10 +106,3 @@ partitioned_jobs_config:
 # for the `consume` method to timeout and do nothing.
 # So a significantly higher concurrency is needed to account for that.
 low_traffic_concurrency: 50
-# The list of jobs for which we enable PHP7. This config is temporary since we will
-# eventually switch all the jobs to using PHP7. For all the jobs that use their own
-# special configs this list is not needed as the PHP7 cookie can be specified directly
-# in the job definition.
-low_traffic_php7_enabled:
-  - updateBetaFeaturesUserCounts
-  - recentChangesUpdate
