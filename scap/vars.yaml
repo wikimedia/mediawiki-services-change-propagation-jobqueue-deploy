@@ -72,7 +72,7 @@ high_traffic_jobs_config:
     concurrency: 100
   cirrusSearchLinksUpdatePrioritized:
     retry_limit: 0
-    concurrency: 150
+    concurrency: 200
   cirrusSearchOtherIndex:
     retry_limit: 0
     concurrency: 5
