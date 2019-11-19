@@ -18,7 +18,19 @@ spec: &spec
             redis:
               path: <%= redis_path %>
               password: <%= redis_pass if redis_pass else '' %>
-    /{api:sys}/partition:
+    /{api:sys}/partition/cirrussearch_cluster:
+      x-modules:
+        - path: src/sys/partitioner.js
+          options:
+            templates:
+              partition_stream: 'cpjobqueue.partitioned.{{message.meta.stream}}'
+            partition_key: cluster
+            partition_default: 1
+            partition_map:
+              cloudelastic: 0
+              codfw: 1,
+              eqiad: 2,
+    /{api:sys}/partition/mediawiki_database:
       x-modules:
         - path: src/sys/partitioner.js
           options:
@@ -121,16 +133,15 @@ spec: &spec
                 concurrency: <%= options.partitioner_concurrency %>
                 exec:
                   method: 'post'
-                  uri: '/sys/partition/'
+                  uri: '/sys/partition/<%= options.partitioner_kind %>'
                   headers:
                     content-type: application/json
                   body: '{{globals.message}}'
               <%= topic %>:
                 topic: 'cpjobqueue.partitioned.mediawiki.job.<%= topic %>'
-                # Total concurrency divided by 8 partitions
-                concurrency: <%= options.partition_concurrency %>
-                # Abandon jobs which root job is more then 1 week long
-                root_claim_ttl: 604800
+<%- for key, value in options['partition'].iteritems() %>
+                <%= key %>: <%= value %>
+<%- endfor %>
                 exec:
                   method: post
                   uri: '<%= jobrunner_uri %>'

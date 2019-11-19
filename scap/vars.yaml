@@ -58,9 +58,6 @@ high_traffic_jobs_config:
   cirrusSearchDeletePages:
     retry_limit: 0
     concurrency: 5
-  cirrusSearchElasticaWrite:
-    reenqueue_delay: 3600
-    retry_limit: 0
   cirrusSearchIncomingLinkCount:
     retry_limit: 0
     concurrency: 15
@@ -85,20 +82,39 @@ videoscaler_jobs_config:
 # Some jobs require partitioning according to MariaDB shards.
 partitioned_jobs_config:
   refreshLinks:
+    # Partition jobs by mediawiki database cluster (s1, s2, etc.)
+    partitioner_kind: mediawiki_database
     # This is the concurrency for the partitioner
     # itself, it's does not actually touch Mediawiki, only re-enqueues the
     # jobs according to proper partitions
     partitioner_concurrency: 200
-    # This is the concurrency of the individual partitions, so overall concurrency
-    # is 8 * 20 = 160
-    partition_concurrency: 20
+    partition:
+      # This is the concurrency of the individual partitions, so overall concurrency
+      # is 8 * 20 = 160
+      concurrency: 20
+      # Abandon jobs which root job is more than 1 week long
+      root_claim_ttl: 604800
   htmlCacheUpdate:
+    # Partition jobs by mediawiki database cluster (s1, s2, etc.)
+    partitioner_kind: mediawiki_database
     partitioner_concurrency: 50
-    # This is the concurrency of the individual partitions, so overall concurrency
-    # is 8 * 4 = 32
-    # The load of htmlCacheUpdate is uneven across partitions, so we are using a bit
-    # higher overall concurrency then needed.
-    partition_concurrency: 4
+    partition:
+      # This is the concurrency of the individual partitions, so overall concurrency
+      # is 8 * 4 = 32
+      # The load of htmlCacheUpdate is uneven across partitions, so we are using a bit
+      # higher overall concurrency then needed.
+      concurrency: 4
+      # Abandon jobs which root job is more than 1 week long
+      root_claim_ttl: 604800
+  cirrusSearchElasticaWrite:
+    partitioner_kind: cirrussearch_cluster
+    partitioner_concurrency: 50
+    partition:
+      # This is the concurrency of the individual partitions, so overall concurrency
+      # is 100 * 3 = 300
+      concurrency: 100
+      reenqueue_delay: 3600
+      retry_limit: 0
 # All the jobs not explicitly specified in the config are combined into the
 # `low_traffic_jobs` rule, so they share a worker. The low_traffic_concurrency
 # is shared between all the jobs other then the exceptions listed above.
