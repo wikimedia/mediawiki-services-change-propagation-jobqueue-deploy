@@ -24,7 +24,7 @@ spec: &spec
           options:
             templates:
               partition_stream: 'cpjobqueue.partitioned.{{message.meta.stream}}'
-            partition_key: cluster
+            partition_key: params.cluster
             partition_default: 1
             partition_map:
               cloudelastic: 0
