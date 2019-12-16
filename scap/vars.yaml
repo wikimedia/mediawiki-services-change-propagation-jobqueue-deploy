@@ -122,4 +122,4 @@ partitioned_jobs_config:
 # Most of the topics are empty most of the time, so a lot of slots are just waiting
 # for the `consume` method to timeout and do nothing.
 # So a significantly higher concurrency is needed to account for that.
-low_traffic_concurrency: 50
+low_traffic_concurrency: 500
