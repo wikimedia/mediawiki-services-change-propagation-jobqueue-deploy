@@ -45,6 +45,11 @@ high_traffic_jobs_config:
     concurrency: 5
   constraintsRunCheck:
     concurrency: 30
+  fetchGoogleCloudVisionAnnotations:
+    concurrency: 10
+    # All the jobs of this kind are delayed exactly 48 hours, so we don't want
+    # the reenqueue feature to kick in.
+    reenqueue_delay: 259200
   # For cirrus search jobs the retries are built into the job itself,
   # so disable the retries by change-prop. We need special rules for cirrus
   # jobs because they need special configuration.
