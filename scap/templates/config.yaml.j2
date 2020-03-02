@@ -120,7 +120,7 @@ spec: &spec
 <%- endfor %>
                 exec:
                   method: post
-                  uri: '<%= jobrunner_uri %>'
+                  uri: '<%= jobrunner_host %>/rpc/RunSingleJob.php'
                   headers:
                     content-type: 'application/json'
                   body: '{{globals.message}}'
@@ -144,7 +144,7 @@ spec: &spec
 <%- endfor %>
                 exec:
                   method: post
-                  uri: '<%= jobrunner_uri %>'
+                  uri: '<%= jobrunner_host %>/rpc/RunSingleJob.php'
                   headers:
                     content-type: application/json
                   body: '{{globals.message}}'
@@ -160,7 +160,7 @@ spec: &spec
 <%- endfor %>
                 exec:
                   method: post
-                  uri: '<%= videoscaler_uri %>'
+                  uri: '<%= videoscaler_host %>/rpc/RunSingleJob.php'
                   headers:
                     content-type: 'application/json'
                   body: '{{globals.message}}'
@@ -186,7 +186,7 @@ spec: &spec
 <%- endfor %>
                 exec:
                   method: post
-                  uri: '<%= jobrunner_uri %>'
+                  uri: '<%= jobrunner_host %>/rpc/RunSingleJob.php'
                   headers:
                     content-type: 'application/json'
                   body: '{{globals.message}}'
@@ -197,7 +197,7 @@ spec: &spec
                 topic: '/^mediawiki\.job\..*/'
                 exec:
                   method: post
-                  uri: '<%= jobrunner_uri %>'
+                  uri: '<%= jobrunner_host %>/rpc/RunSingleJob.php'
                   headers:
                     content-type: 'application/json'
                   body: '{{globals.message}}'

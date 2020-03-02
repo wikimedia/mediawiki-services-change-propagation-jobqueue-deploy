@@ -12,8 +12,8 @@ port: 7200
 proxy:
 site: datacenter1
 broker_list: localhost:9092
-jobrunner_uri: http://localhost/rpc/RunSingleJob.php
-videoscaler_uri: http://localhost/rpc/RunSingleJob.php
+jobrunner_host: http://localhost
+videoscaler_host: http://localhost
 redis_path: /var/run/redis.sock
 redis_pass:
 env: production
