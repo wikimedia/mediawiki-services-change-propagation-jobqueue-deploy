@@ -184,6 +184,7 @@ spec: &spec
 <%- for job in partitioned_jobs_config.iterkeys() %>
                   - 'mediawiki.job.<%= job %>'
 <%- endfor %>
+                  - 'mediawiki.job.ThumbnailRender'
                 exec:
                   method: post
                   uri: '<%= jobrunner_host %>/rpc/RunSingleJob.php'
