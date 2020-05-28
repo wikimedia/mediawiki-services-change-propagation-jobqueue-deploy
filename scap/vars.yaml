@@ -25,6 +25,8 @@ concurrency: 10
 # their own processing unit - each type of job listed explicitly is processed
 # by a separate worker in change-prop.
 high_traffic_jobs_config:
+  ThumbnailRender:
+    concurrency: 20
   categoryMembershipChange:
     concurrency: 200
   # CNDPurge is quite low-volume, but it uses delayed execution,

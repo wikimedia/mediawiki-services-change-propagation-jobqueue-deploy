@@ -112,21 +112,8 @@ spec: &spec
             disable_ratelimit: true
             templates:
 <%- if env == 'production' %>
-<%- for topic, topic_config in high_traffic_jobs_config.iteritems() %>
-              <%= topic %>:
-                topic: 'mediawiki.job.<%= topic %>'
-<%- for key, value in topic_config.iteritems() %>
-                <%= key %>: <%= value %>
-<%- endfor %>
-                exec:
-                  method: post
-                  uri: '<%= jobrunner_host %>/rpc/RunSingleJob.php'
-                  headers:
-                    content-type: 'application/json'
-                  body: '{{globals.message}}'
-                  agentOptions:
-                    keepAlive: true
-<%- endfor %>
+              # All high traffic jobs have been migrated to kubernetes
+              # - see deployment-charts
 <%- for topic, options in partitioned_jobs_config.iteritems() %>
               <%= topic %>_partitioner:
                 topic: 'mediawiki.job.<%= topic %>'
@@ -184,7 +171,6 @@ spec: &spec
 <%- for job in partitioned_jobs_config.iterkeys() %>
                   - 'mediawiki.job.<%= job %>'
 <%- endfor %>
-                  - 'mediawiki.job.ThumbnailRender'
                 exec:
                   method: post
                   uri: '<%= jobrunner_host %>/rpc/RunSingleJob.php'
