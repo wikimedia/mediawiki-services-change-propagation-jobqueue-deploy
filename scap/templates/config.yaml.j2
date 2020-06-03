@@ -9,82 +9,6 @@ spec: &spec
               user-agent: true
   title: The Change Propagation for JobQueue root
   paths:
-<%- if env == 'production' %>
-    /{api:sys}/dedupe:
-      x-modules:
-        - path: src/sys/deduplicator.js
-          options:
-            redis_prefix: 'CPJQ'
-            redis:
-              path: <%= redis_path %>
-              password: <%= redis_pass if redis_pass else '' %>
-    /{api:sys}/partition/cirrussearch_cluster:
-      x-modules:
-        - path: src/sys/partitioner.js
-          options:
-            templates:
-              partition_stream: 'cpjobqueue.partitioned.{{message.meta.stream}}'
-            partition_key: params.cluster
-            partition_default: 1
-            partition_map:
-              cloudelastic: 0
-              codfw: 1
-              eqiad: 2
-    /{api:sys}/partition/mediawiki_database:
-      x-modules:
-        - path: src/sys/partitioner.js
-          options:
-            templates:
-              partition_stream: 'cpjobqueue.partitioned.{{message.meta.stream}}'
-            partition_key: database
-            partition_default: 2
-            partition_map:
-              # s1: enwiki
-              enwiki: 0
-              # s2: large wikis
-              bgwiki: 1
-              bgwiktionary: 1
-              cswiki: 1
-              enwikiquote: 1
-              enwiktionary: 1
-              eowiki: 1
-              fiwiki: 1
-              idwiki: 1
-              itwiki: 1
-              nlwiki: 1
-              nowiki: 1
-              plwiki: 1
-              ptwiki: 1
-              svwiki: 1
-              thwiki: 1
-              trwiki: 1
-              zhwiki: 1
-              # s3 (default)
-              # s4: commons
-              commonswiki: 3
-              # s5: dewiki
-              dewiki: 4
-              # s6: large wikis
-              frwiki: 5
-              jawiki: 5
-              ruwiki: 5
-              # s7: large wikis centralauth
-              eswiki: 6
-              huwiki: 6
-              hewiki: 6
-              ukwiki: 6
-              frwiktionary: 6
-              metawiki: 6
-              arwiki: 6
-              centralauth: 6
-              cawiki: 6
-              viwiki: 6
-              fawiki: 6
-              rowiki: 6
-              kowiki: 6
-              # s8: wikidata
-              wikidatawiki: 7
-<%- endif %>
     /{api:sys}/queue:
       x-modules:
         - path: src/sys/kafka.js
@@ -110,76 +34,8 @@ spec: &spec
             startup_delay: 60000
             disable_blacklist: true
             disable_ratelimit: true
+<%- if env == 'beta' %>
             templates:
-<%- if env == 'production' %>
-              # All high traffic jobs have been migrated to kubernetes
-              # - see deployment-charts
-<%- for topic, options in partitioned_jobs_config.iteritems() %>
-              <%= topic %>_partitioner:
-                topic: 'mediawiki.job.<%= topic %>'
-                concurrency: <%= options.partitioner_concurrency %>
-                exec:
-                  method: 'post'
-                  uri: '/sys/partition/<%= options.partitioner_kind %>/'
-                  headers:
-                    content-type: application/json
-                  body: '{{globals.message}}'
-              <%= topic %>:
-                topic: 'cpjobqueue.partitioned.mediawiki.job.<%= topic %>'
-<%- for key, value in options['partition'].iteritems() %>
-                <%= key %>: <%= value %>
-<%- endfor %>
-                exec:
-                  method: post
-                  uri: '<%= jobrunner_host %>/rpc/RunSingleJob.php'
-                  headers:
-                    content-type: application/json
-                  body: '{{globals.message}}'
-                  agentOptions:
-                    keepAlive: true
-<%- endfor %>
-# Videoscaler jobs need to have special rules since then need to go to a different LVS
-<%- for topic, topic_config in videoscaler_jobs_config.iteritems() %>
-              <%= topic %>:
-                topic: 'mediawiki.job.<%= topic %>'
-<%- for key, value in topic_config.iteritems() %>
-                <%= key %>: <%= value %>
-<%- endfor %>
-                exec:
-                  method: post
-                  uri: '<%= videoscaler_host %>/rpc/RunSingleJob.php'
-                  headers:
-                    content-type: 'application/json'
-                  body: '{{globals.message}}'
-                  agentOptions:
-                    keepAlive: true
-<%- endfor %>
-# Now special rule to cover all the low-traffic jobs
-              low_traffic_jobs:
-                concurrency: <%= low_traffic_concurrency %>
-                topics:
-                  - '/^mediawiki\.job\..*/'
-                # Don't execute anything that's covered by different rules
-                exclude_topics:
-                  - 'mediawiki.job.fetchGoogleCloudVisionAnnotations'
-<%- for job in high_traffic_jobs_config.iterkeys() %>
-                  - 'mediawiki.job.<%= job %>'
-<%- endfor %>
-<%- for job in videoscaler_jobs_config.iterkeys() %>
-                  - 'mediawiki.job.<%= job %>'
-<%- endfor %>
-<%- for job in partitioned_jobs_config.iterkeys() %>
-                  - 'mediawiki.job.<%= job %>'
-<%- endfor %>
-                exec:
-                  method: post
-                  uri: '<%= jobrunner_host %>/rpc/RunSingleJob.php'
-                  headers:
-                    content-type: 'application/json'
-                  body: '{{globals.message}}'
-                  agentOptions:
-                    keepAlive: true
-<%- else %>
               job:
                 topic: '/^mediawiki\.job\..*/'
                 exec:
@@ -190,6 +46,8 @@ spec: &spec
                   body: '{{globals.message}}'
                   agentOptions:
                     keepAlive: true
+<%- else %>
+            templates: {}
 <%- endif %>
 
 
